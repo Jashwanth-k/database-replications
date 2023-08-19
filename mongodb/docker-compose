@@ -1,0 +1,58 @@
+version: '3'
+services:
+  mongo1:
+    image: mongo
+    container_name: ${ip}-${port1}
+    volumes:
+      - ${data_path}/${dir_1}:/data/db
+      - ${keyfile_path}:/keyfile
+    ports:
+      - ${port1}:${port1}
+    restart: always
+    networks:
+      - mongonetwork
+    command:  [ "--auth", "--keyFile", "/keyfile", "--replSet", "${replset_name}", "--bind_ip_all", "--port", "${port1}"]
+    environment:
+       MONGO_INITDB_ROOT_USERNAME: ${root_user}
+       MONGO_INITDB_ROOT_PASSWORD: ${root_pass}
+    healthcheck:
+       test: test $$(mongosh --port ${port1} --authenticationDatabase admin --username ${root_user} -p ${root_pass}  --quiet --eval "rs.status().ok") -eq 1
+       interval: "2"
+       retries: "3"
+       timeout: "5"
+
+  mongo2:
+    image: mongo
+    container_name: ${ip}-${port2}
+    volumes:
+      - ${data_path}/${dir_2}:/data/db
+      - ${keyfile_path}:/keyfile
+    ports:
+      - ${port2}:${port2}
+    restart: always
+    networks:
+      - mongonetwork
+    command: ["--auth", "--keyFile", "/keyfile", "--replSet", "${replset_name}", "--bind_ip_all", "--port", "${port2}"]
+    environment:
+       MONGO_INITDB_ROOT_USERNAME: ${root_user}
+       MONGO_INITDB_ROOT_PASSWORD: ${root_pass}
+
+  mongo3:
+    image: mongo
+    container_name: ${ip}-${port3}
+    volumes:
+      - ${data_path}/${dir_3}:/data/db
+      - ${keyfile_path}:/keyfile
+    ports:
+      - ${port3}:${port3}
+    restart: always
+    networks:
+      - mongonetwork
+    command: ["--auth", "--keyFile", "/keyfile", "--replSet", "${replset_name}", "--bind_ip_all", "--port", "${port3}"]
+    environment:
+       MONGO_INITDB_ROOT_USERNAME: ${root_user}
+       MONGO_INITDB_ROOT_PASSWORD: ${root_pass}
+
+networks:
+  mongonetwork:
+     driver: bridge

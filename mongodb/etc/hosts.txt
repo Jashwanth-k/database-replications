@@ -1,0 +1,3 @@
+ip mongo1
+ip mongo2
+ip mongo3
