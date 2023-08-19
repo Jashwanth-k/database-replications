@@ -1,0 +1,13 @@
+STOP SLAVE;
+
+CHANGE MASTER TO
+    MASTER_HOST= '__masterip__',
+    MASTER_USER = '__user__',
+    MASTER_PASSWORD = '__user__',
+    MASTER_LOG_FILE = 'mysql-bin.000006',
+    MASTER_LOG_POS = 157,
+    MASTER_PORT = 3306;
+
+START SLAVE;
+
+#should create repilcation user on masterDB and grant replication privileges

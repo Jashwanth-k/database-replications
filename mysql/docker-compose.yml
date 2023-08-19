@@ -1,0 +1,50 @@
+version: '3'
+
+services:
+  mysql-master:
+    image: mysql
+    container_name: mysql_master
+    ports:
+      - ${master_port}:${master_port}
+    volumes:
+      - ${master_dir}:/var/lib/mysql
+    restart: always
+    networks:
+      - mysql-network
+    environment:
+      MYSQL_ROOT_USERNAME: ${root_user}
+      MYSQL_ROOT_PASSWORD: ${root_pass}
+      MYSQL_ROOT_HOST: '%'
+    command: ["--server-id=1", "--log-bin=mysql-bin", "--binlog-format=row"]
+
+  mysql-slave:
+    image: mysql
+    container_name: mysql_slave
+    ports:
+      - ${slave_port}:${slave_port}
+    volumes:
+      - ${slave_dir}:/var/lib/mysql
+    restart: always
+    networks:
+      - mysql-network
+    environment:
+      MYSQL_ROOT_USERNAME: ${root_user}
+      MYSQL_ROOT_PASSWORD: ${root_pass}
+    depends_on:
+      - mysql-master
+    command: [
+        "--server-id=2",
+        "--log-bin=mysql-bin",
+        "--binlog-format=row",
+        "--relay-log=slave-relay-bin",
+        "--relay-log-index=slave-relay-bin.index",
+        "--slave-skip-errors=all",
+        "--skip-log-slave-updates",
+        "--read-only=1",
+        "--slave-net-timeout=10",
+        "--net_retry_count=10"
+      ]
+
+networks:
+  mysql-network:
+    driver: bridge
