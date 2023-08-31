@@ -1,0 +1,250 @@
+version: '3'
+services:
+  mongo1:
+    image: mongo
+    container_name: node-${port1}
+    volumes:
+      - ${data_path}/dir1:/data/db
+      - ${keyfile_path}:/keyfile
+    ports:
+      - ${port1}:${defaultport}
+    expose:
+      - ${defaultport}
+    restart: always
+    networks:
+      - mongonetwork
+    command: mongod --auth --keyFile /keyfile --shardsvr --replSet ${replset1_name} --bind_ip_all --port ${defaultport} --dbpath /data/db
+    environment:
+       MONGO_INITDB_ROOT_USERNAME: ${root_user}
+       MONGO_INITDB_ROOT_PASSWORD: ${root_pass}
+#    healthcheck:
+ #      test: test $$(mongosh --port ${port1} --authenticationDatabase admin --username ${root_user} -p ${root_pass}  --quiet --eval "rs.status().ok") -eq 1
+  #     interval: 5s
+   #    retries: 3
+    #   timeout: 10s
+
+  mongo2:
+    image: mongo
+    container_name: node-${port2}
+    volumes:
+      - ${data_path}/dir2:/data/db
+      - ${keyfile_path}:/keyfile
+    ports:
+      - ${port2}:${defaultport}
+    expose:
+      - ${defaultport}
+    restart: always
+    networks:
+      - mongonetwork
+    command: mongod --auth --keyFile /keyfile --shardsvr --replSet ${replset1_name} --bind_ip_all --port ${defaultport} --dbpath /data/db
+    environment:
+       MONGO_INITDB_ROOT_USERNAME: ${root_user}
+       MONGO_INITDB_ROOT_PASSWORD: ${root_pass}
+
+  mongo3:
+    image: mongo
+    container_name: node-${port3}
+    volumes:
+      - ${data_path}/dir3:/data/db
+      - ${keyfile_path}:/keyfile
+    ports:
+      - ${port3}:${defaultport}
+    expose:
+      - ${defaultport}
+    restart: always
+    networks:
+      - mongonetwork
+    command: mongod --auth --keyFile /keyfile --shardsvr --replSet ${replset1_name} --bind_ip_all --port ${defaultport} --dbpath /data/db
+    environment:
+       MONGO_INITDB_ROOT_USERNAME: ${root_user}
+       MONGO_INITDB_ROOT_PASSWORD: ${root_pass}
+
+  mongo4:
+    image: mongo
+    container_name: node-${port4}
+    volumes:
+      - ${data_path}/dir4:/data/db
+      - ${keyfile_path}:/keyfile
+    ports:
+      - ${port4}:${defaultport}
+    expose:
+      - ${defaultport}
+    restart: always
+    networks:
+      - mongonetwork
+    command: mongod --auth --keyFile /keyfile --shardsvr --replSet ${replset2_name} --bind_ip_all --port ${defaultport} --dbpath /data/db
+    environment:
+       MONGO_INITDB_ROOT_USERNAME: ${root_user}
+       MONGO_INITDB_ROOT_PASSWORD: ${root_pass}
+
+  mongo5:
+    image: mongo
+    container_name: node-${port5}
+    volumes:
+      - ${data_path}/dir5:/data/db
+      - ${keyfile_path}:/keyfile
+    ports:
+      - ${port5}:${defaultport}
+    expose:
+      - ${defaultport}
+    restart: always
+    networks:
+      - mongonetwork
+    command: mongod --auth --keyFile /keyfile --shardsvr --replSet ${replset2_name} --bind_ip_all --port ${defaultport} --dbpath /data/db
+    environment:
+       MONGO_INITDB_ROOT_USERNAME: ${root_user}
+       MONGO_INITDB_ROOT_PASSWORD: ${root_pass}
+
+  mongo6:
+    image: mongo
+    container_name: node-${port6}
+    volumes:
+      - ${data_path}/dir6:/data/db
+      - ${keyfile_path}:/keyfile
+    ports:
+      - ${port6}:${defaultport}
+    expose:
+      - ${defaultport}
+    restart: always
+    networks:
+      - mongonetwork
+    command: mongod --auth --keyFile /keyfile --shardsvr --replSet ${replset2_name} --bind_ip_all --port ${defaultport} --dbpath /data/db
+    environment:
+       MONGO_INITDB_ROOT_USERNAME: ${root_user}
+       MONGO_INITDB_ROOT_PASSWORD: ${root_pass}
+
+  mongo7:
+    image: mongo
+    container_name: config-${port7}
+    volumes:
+      - ${data_path}/dir7:/data/configdb
+      - ${keyfile_path}:/keyfile
+    ports:
+      - ${port7}:${defaultport}
+    expose:
+      - ${defaultport}
+      - ${port7}
+    restart: always
+    networks:
+      - mongonetwork
+    command: mongod --configsvr --replSet ${replset1_config} --bind_ip_all --port ${defaultport} --auth --keyFile /keyfile --dbpath /data/configdb
+    environment:
+       MONGO_INITDB_ROOT_USERNAME: ${root_user}
+       MONGO_INITDB_ROOT_PASSWORD: ${root_pass}
+
+  mongo8:
+    image: mongo
+    container_name: config-${port8}
+    volumes:
+      - ${data_path}/dir8:/data/configdb
+      - ${keyfile_path}:/keyfile
+    ports:
+      - ${port8}:${defaultport}
+    expose:
+      - ${defaultport}
+      - ${port8}
+    restart: always
+    networks:
+      - mongonetwork
+    command: mongod --configsvr --replSet ${replset1_config} --bind_ip_all --port ${defaultport} --auth --keyFile /keyfile --dbpath /data/configdb
+    environment:
+       MONGO_INITDB_ROOT_USERNAME: ${root_user}
+       MONGO_INITDB_ROOT_PASSWORD: ${root_pass}
+
+  mongo9:
+    image: mongo
+    container_name: config-${port9}
+    volumes:
+      - ${data_path}/dir9:/data/configdb
+      - ${keyfile_path}:/keyfile
+    ports:
+      - ${port9}:${defaultport}
+    expose:
+      - ${defaultport}
+      - ${port9}
+    restart: always
+    networks:
+      - mongonetwork
+    command: mongod --configsvr --replSet ${replset1_config} --bind_ip_all --port ${defaultport} --auth --keyFile /keyfile --dbpath /data/configdb
+    environment:
+       MONGO_INITDB_ROOT_USERNAME: ${root_user}
+       MONGO_INITDB_ROOT_PASSWORD: ${root_pass}
+
+  mongo10:
+    image: mongo
+    container_name: mongos-${port10}
+    depends_on:
+      - init
+    volumes:
+      - ${keyfile_path}:/keyfile
+    ports:
+      - ${port10}:${defaultport}
+    expose:
+      - ${defaultport}
+    restart: always
+    networks:
+      - mongonetwork
+    command: mongos --configdb "${replset1_config}/config-${port8}:${defaultport},config-${port9}:${defaultport},config-${port10}:${defaultport}" --bind_ip_all --port ${defaultport} --keyFile /keyfile
+    environment:
+       MONGO_INITDB_ROOT_USERNAME: ${root_user}
+       MONGO_INITDB_ROOT_PASSWORD: ${root_pass}
+
+  mongo11:
+    image: mongo
+    container_name: mongos-${port11}
+    depends_on:
+      - init
+    volumes:
+      - ${keyfile_path}:/keyfile
+    ports:
+      - ${port11}:${defaultport}
+    expose:
+      - ${defaultport}
+    restart: always
+    networks:
+      - mongonetwork
+    command: mongos --configdb "${replset1_config}/config-${port8}:${defaultport},config-${port9}:${defaultport},config-${port10}:${defaultport}" --bind_ip_all --port ${defaultport} --keyFile /keyfile
+    environment:
+       MONGO_INITDB_ROOT_USERNAME: ${root_user}
+       MONGO_INITDB_ROOT_PASSWORD: ${root_pass}
+
+  init:
+    image: mongo
+    container_name: init
+    depends_on:
+      - mongo1
+      - mongo2
+      - mongo3
+      - mongo4
+      - mongo5
+      - mongo6
+      - mongo7
+      - mongo8
+      - mongo9
+    volumes:
+      - ./scripts/init.sh:/init.sh
+    environment:
+       USERNAME : ${root_user}
+       PASSWORD : ${root_pass}
+       PORT1 : ${port1}
+       PORT2 : ${port2}
+       PORT3 : ${port3}
+       PORT4 : ${port4}
+       PORT5 : ${port5}
+       PORT6 : ${port6}
+       PORT7 : ${port7}
+       PORT8 : ${port8}
+       PORT9 : ${port9}
+       PORT10 : ${port10}
+       PORT11 : ${port11}
+       HOST : ${ip}
+       REPLSET1 : ${replset1_name}
+       REPLSET2 : ${replset2_name}
+       CFGSET1 : ${replset1_config}
+       DPORT : ${defaultport}
+    command: ["bash", "./init.sh"]
+
+networks:
+  mongonetwork:
+     driver: bridge
+
