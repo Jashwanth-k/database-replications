@@ -1,3 +1,8 @@
+echo ""
+echo "---------------------------------------------------------------------"
+echo "---------------------- DATA NODES REPLICA SET 1 ---------------------"
+echo "---------------------------------------------------------------------"
+echo ""
 mongosh --host "$HOST" --port "$PORT1" --authenticationDatabase admin --username "$USERNAME" --password "$PASSWORD" --eval "
 rs.initiate({
   _id: '$REPLSET1',
@@ -9,6 +14,11 @@ rs.initiate({
 })
 "
 
+echo ""
+echo "---------------------------------------------------------------------"
+echo "---------------------- DATA NODES REPLICA SET 2 ---------------------"
+echo "---------------------------------------------------------------------"
+echo ""
 mongosh --host "$HOST" --port "$PORT4" --authenticationDatabase admin --username "$USERNAME" --password "$PASSWORD" --eval "
 rs.initiate({
   _id: '$REPLSET2',
@@ -20,6 +30,11 @@ rs.initiate({
 })
 "
 
+echo ""
+echo "----------------------------------------------------------------------"
+echo "---------------------- CONFIG NODES REPLICA SET 1 --------------------"
+echo "---------------------------------------------------------------------"
+echo ""
 mongosh --host "$HOST" --port "$PORT7" --authenticationDatabase admin --username "$USERNAME" --password "$PASSWORD" --eval "
 rs.initiate({
   _id: '$CFGSET1',
@@ -32,8 +47,12 @@ rs.initiate({
 })
 "
 
+echo ""
+echo "---------------------------------------------------------------------"
+echo "--------------------------- ADDING SHARDS ---------------------------"
+echo "---------------------------------------------------------------------"
+echo ""
 mongosh --host "$HOST" --port "$PORT10" --username "$USERNAME" --password "$PASSWORD" --eval "
 sh.addShard('$REPLSET1/$HOST:$PORT1')
 sh.addShard('$REPLSET2/$HOST:$PORT4')
 "
-
