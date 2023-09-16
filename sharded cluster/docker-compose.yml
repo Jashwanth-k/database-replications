@@ -13,7 +13,7 @@ services:
     restart: always
     networks:
       - mongonetwork
-    command: mongod --auth --keyFile /keyfile --shardsvr --replSet ${replset1_name} --bind_ip_all --port ${defaultport} --dbpath /data/db
+    command: ${nodeCmd1}
     environment:
        MONGO_INITDB_ROOT_USERNAME: ${root_user}
        MONGO_INITDB_ROOT_PASSWORD: ${root_pass}
@@ -36,7 +36,7 @@ services:
     restart: always
     networks:
       - mongonetwork
-    command: mongod --auth --keyFile /keyfile --shardsvr --replSet ${replset1_name} --bind_ip_all --port ${defaultport} --dbpath /data/db
+    command: ${nodeCmd1}
     environment:
        MONGO_INITDB_ROOT_USERNAME: ${root_user}
        MONGO_INITDB_ROOT_PASSWORD: ${root_pass}
@@ -54,7 +54,7 @@ services:
     restart: always
     networks:
       - mongonetwork
-    command: mongod --auth --keyFile /keyfile --shardsvr --replSet ${replset1_name} --bind_ip_all --port ${defaultport} --dbpath /data/db
+    command: ${nodeCmd1}
     environment:
        MONGO_INITDB_ROOT_USERNAME: ${root_user}
        MONGO_INITDB_ROOT_PASSWORD: ${root_pass}
@@ -72,7 +72,7 @@ services:
     restart: always
     networks:
       - mongonetwork
-    command: mongod --auth --keyFile /keyfile --shardsvr --replSet ${replset2_name} --bind_ip_all --port ${defaultport} --dbpath /data/db
+    command: ${nodeCmd2}
     environment:
        MONGO_INITDB_ROOT_USERNAME: ${root_user}
        MONGO_INITDB_ROOT_PASSWORD: ${root_pass}
@@ -90,7 +90,7 @@ services:
     restart: always
     networks:
       - mongonetwork
-    command: mongod --auth --keyFile /keyfile --shardsvr --replSet ${replset2_name} --bind_ip_all --port ${defaultport} --dbpath /data/db
+    command: ${nodeCmd2}
     environment:
        MONGO_INITDB_ROOT_USERNAME: ${root_user}
        MONGO_INITDB_ROOT_PASSWORD: ${root_pass}
@@ -108,7 +108,7 @@ services:
     restart: always
     networks:
       - mongonetwork
-    command: mongod --auth --keyFile /keyfile --shardsvr --replSet ${replset2_name} --bind_ip_all --port ${defaultport} --dbpath /data/db
+    command: ${nodeCmd2}
     environment:
        MONGO_INITDB_ROOT_USERNAME: ${root_user}
        MONGO_INITDB_ROOT_PASSWORD: ${root_pass}
@@ -127,7 +127,7 @@ services:
     restart: always
     networks:
       - mongonetwork
-    command: mongod --configsvr --replSet ${replset1_config} --bind_ip_all --port ${defaultport} --auth --keyFile /keyfile --dbpath /data/configdb
+    command: ${configNodeCmd}
     environment:
        MONGO_INITDB_ROOT_USERNAME: ${root_user}
        MONGO_INITDB_ROOT_PASSWORD: ${root_pass}
@@ -146,7 +146,7 @@ services:
     restart: always
     networks:
       - mongonetwork
-    command: mongod --configsvr --replSet ${replset1_config} --bind_ip_all --port ${defaultport} --auth --keyFile /keyfile --dbpath /data/configdb
+    command: ${configNodeCmd}
     environment:
        MONGO_INITDB_ROOT_USERNAME: ${root_user}
        MONGO_INITDB_ROOT_PASSWORD: ${root_pass}
@@ -165,7 +165,7 @@ services:
     restart: always
     networks:
       - mongonetwork
-    command: mongod --configsvr --replSet ${replset1_config} --bind_ip_all --port ${defaultport} --auth --keyFile /keyfile --dbpath /data/configdb
+    command: ${configNodeCmd}
     environment:
        MONGO_INITDB_ROOT_USERNAME: ${root_user}
        MONGO_INITDB_ROOT_PASSWORD: ${root_pass}
@@ -247,4 +247,3 @@ services:
 networks:
   mongonetwork:
      driver: bridge
-
