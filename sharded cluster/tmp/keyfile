@@ -1,0 +1,3 @@
+openssl rand -base64 756 > path-to-file
+chmod 600 path-to-file
+chown 999:999 path-to-file
